@@ -15,6 +15,9 @@ public struct BarChartRow : View {
     var maxValue: Double {
         data.max() ?? 0
     }
+    var minValue: Double {
+        (data.min() ?? 0) - 1
+    }
     @Binding var touchLocation: CGFloat
     public var body: some View {
         GeometryReader { geometry in
@@ -37,14 +40,14 @@ public struct BarChartRow : View {
     }
     
     func normalizedValue(index: Int) -> Double {
-        return Double(self.data[index])/Double(self.maxValue)
+        return (data[index] - minValue)/(maxValue - minValue)
     }
 }
 
 #if DEBUG
 struct ChartRow_Previews : PreviewProvider {
     static var previews: some View {
-        BarChartRow(data: [8,23,54,32,12,37,7], accentColor: Colors.OrangeStart, touchLocation: .constant(-1))
+        BarChartRow(data: TestData.values.points.map { $0.1 }, accentColor: Colors.OrangeStart, touchLocation: .constant(-1))
     }
 }
 #endif
